@@ -1,3 +1,8 @@
+/**
+ * WorkPulse Authentication & Session Context Provider
+ * Manages user authentication state, session persistence, and role-based helpers
+ */
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { api } from '../services/api';
 
