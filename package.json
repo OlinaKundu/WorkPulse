@@ -1,9 +1,10 @@
 {
-  "name": "inner-eye-attendance-enterprise",
+  "name": "workpulse-enterprise",
   "version": "1.0.0",
-  "description": "Enterprise Employee Attendance & Productivity Management System - Inner Eye Consultancy Services LLP",
+  "description": "Enterprise Employee Attendance & Workforce Management Platform",
   "scripts": {
     "install:all": "npm --prefix backend install && npm --prefix frontend install",
+    "db:init": "npm --prefix backend run prisma:push && npm --prefix backend run seed",
     "seed": "npm --prefix backend run seed",
     "dev:backend": "npm --prefix backend run dev",
     "dev:frontend": "npm --prefix frontend run dev",
@@ -12,13 +13,13 @@
   },
   "keywords": [
     "attendance-management",
-    "enterprise",
+    "workforce-management",
     "burnout-analytics",
     "geofencing",
     "haversine",
     "acid-compliance",
-    "inner-eye"
+    "workpulse"
   ],
-  "author": "Candidate Submission for Inner Eye Consultancy Services LLP",
-  "license": "ISC"
+  "author": "Olina Kundu",
+  "license": "MIT"
 }
