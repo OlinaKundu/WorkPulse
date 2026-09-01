@@ -1,0 +1,37 @@
+module.exports = {
+  OFFICE_LATITUDE: parseFloat(process.env.OFFICE_LATITUDE) || 12.971598,
+  OFFICE_LONGITUDE: parseFloat(process.env.OFFICE_LONGITUDE) || 77.594562,
+  GEOFENCE_RADIUS_METERS: parseFloat(process.env.GEOFENCE_RADIUS_METERS) || 200,
+
+  STANDARD_SHIFT_START_HOUR: 9,
+  STANDARD_SHIFT_START_MINUTE: 30, // 09:30 AM
+  FULL_DAY_MIN_HOURS: 8.0,
+  HALF_DAY_MIN_HOURS: 4.0,
+
+  ROLES: {
+    EMPLOYEE: 'Employee',
+    HR: 'HR',
+  },
+
+  STATUS: {
+    PRESENT: 'Present',
+    LATE: 'Late',
+    HALF_DAY: 'Half Day',
+    ABSENT: 'Absent',
+    ON_LEAVE: 'On Leave',
+  },
+
+  BREAK_TYPES: {
+    LUNCH: 'Lunch',
+    COFFEE: 'Coffee',
+    SHORT_BREAK: 'Short Break',
+    MEETING: 'Meeting',
+  },
+
+  AUDIT_ACTIONS: {
+    ATTENDANCE_OVERRIDE: 'ATTENDANCE_OVERRIDE',
+    LEAVE_BALANCE_OVERRIDE: 'LEAVE_BALANCE_OVERRIDE',
+    MANUAL_CHECK_OUT: 'MANUAL_CHECK_OUT',
+    MANUAL_STATUS_CHANGE: 'MANUAL_STATUS_CHANGE',
+  },
+};

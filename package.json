@@ -1,0 +1,24 @@
+{
+  "name": "inner-eye-attendance-enterprise",
+  "version": "1.0.0",
+  "description": "Enterprise Employee Attendance & Productivity Management System - Inner Eye Consultancy Services LLP",
+  "scripts": {
+    "install:all": "npm --prefix backend install && npm --prefix frontend install",
+    "seed": "npm --prefix backend run seed",
+    "dev:backend": "npm --prefix backend run dev",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "start:backend": "npm --prefix backend start",
+    "build:frontend": "npm --prefix frontend run build"
+  },
+  "keywords": [
+    "attendance-management",
+    "enterprise",
+    "burnout-analytics",
+    "geofencing",
+    "haversine",
+    "acid-compliance",
+    "inner-eye"
+  ],
+  "author": "Candidate Submission for Inner Eye Consultancy Services LLP",
+  "license": "ISC"
+}

@@ -1,0 +1,99 @@
+// Prisma schema for Inner Eye Enterprise Attendance System
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Department {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  createdAt DateTime @default(now()) @map("created_at")
+
+  users User[]
+
+  @@map("departments")
+}
+
+model User {
+  id           String   @id @default(uuid())
+  departmentId String?  @map("department_id")
+  fullName     String   @map("full_name")
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  role         String   @default("Employee") // "Employee" | "HR"
+  leaveBalance Float    @default(20.0) @map("leave_balance")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  department       Department?  @relation(fields: [departmentId], references: [id], onDelete: SetNull)
+  attendances      Attendance[]
+  performedAudits  AuditLog[]   @relation("PerformedByRelation")
+  targetedAudits   AuditLog[]   @relation("TargetUserRelation")
+
+  @@map("users")
+}
+
+model Attendance {
+  id             String    @id @default(uuid())
+  userId         String    @map("user_id")
+  attendanceDate String    @map("attendance_date") // Format: YYYY-MM-DD
+  checkIn        DateTime? @map("check_in")
+  checkOut       DateTime? @map("check_out")
+  workingHours   Float     @default(0.0) @map("working_hours")
+  status         String    @default("Present") // "Present" | "Late" | "Half Day" | "Absent" | "On Leave"
+  leaveDeducted  Float     @default(0.0) @map("leave_deducted")
+  isOutOfBounds  Boolean   @default(false) @map("is_out_of_bounds")
+  latitude       Float?
+  longitude      Float?
+  distanceMeters Float?    @map("distance_meters")
+  createdAt      DateTime  @default(now()) @map("created_at")
+
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  breaks    Break[]
+  auditLogs AuditLog[]
+
+  @@unique([userId, attendanceDate], name: "unique_user_daily_attendance")
+  @@map("attendance")
+}
+
+model Break {
+  id              String    @id @default(uuid())
+  attendanceId    String    @map("attendance_id")
+  breakStart      DateTime  @map("break_start")
+  breakEnd        DateTime? @map("break_end")
+  breakType       String    @default("Lunch") @map("break_type") // "Lunch" | "Coffee" | "Short Break" | "Meeting"
+  durationMinutes Float     @default(0.0) @map("duration_minutes")
+
+  attendance Attendance @relation(fields: [attendanceId], references: [id], onDelete: Cascade)
+
+  @@map("breaks")
+}
+
+model AuditLog {
+  id                 String   @id @default(uuid())
+  performedBy        String   @map("performed_by")
+  targetAttendanceId String?  @map("target_attendance_id")
+  targetUserId       String?  @map("target_user_id")
+  action             String   // e.g., "ATTENDANCE_OVERRIDE", "LEAVE_BALANCE_OVERRIDE", "MANUAL_CHECKOUT"
+  oldValue           String?  @map("old_value") // JSON or string snapshot
+  newValue           String   @map("new_value") // JSON or string snapshot
+  createdAt          DateTime @default(now()) @map("created_at")
+
+  performer        User        @relation("PerformedByRelation", fields: [performedBy], references: [id], onDelete: Cascade)
+  targetUser       User?       @relation("TargetUserRelation", fields: [targetUserId], references: [id], onDelete: SetNull)
+  targetAttendance Attendance? @relation(fields: [targetAttendanceId], references: [id], onDelete: SetNull)
+
+  @@map("audit_logs")
+}
+
+model CompanySetting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@map("company_settings")
+}

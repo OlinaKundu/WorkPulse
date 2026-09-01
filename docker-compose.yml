@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: innereye_postgres
+    restart: always
+    environment:
+      POSTGRES_DB: innereye_attendance
+      POSTGRES_USER: innereye_admin
+      POSTGRES_PASSWORD: SecretEnterprisePassword2026
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./schema.sql:/docker-entrypoint-initdb.d/01_schema.sql
+      - ./seed.sql:/docker-entrypoint-initdb.d/02_seed.sql
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: innereye_backend
+    restart: always
+    environment:
+      PORT: 5000
+      DATABASE_URL: "postgresql://innereye_admin:SecretEnterprisePassword2026@postgres:5432/innereye_attendance?schema=public"
+      JWT_SECRET: "inner_eye_super_secret_jwt_key_2026_enterprise_production"
+      OFFICE_LATITUDE: 12.971598
+      OFFICE_LONGITUDE: 77.594562
+      GEOFENCE_RADIUS_METERS: 200
+    ports:
+      - "5000:5000"
+    depends_on:
+      - postgres
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: innereye_frontend
+    restart: always
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
