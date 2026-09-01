@@ -199,5 +199,3 @@ npm run studio
 
 ---
 
-## License
-MIT License.
