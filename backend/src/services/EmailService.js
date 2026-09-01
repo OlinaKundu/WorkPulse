@@ -27,7 +27,7 @@ class EmailService {
         },
       });
       this.cachedConfig = configKey;
-      console.log(`📧 EmailService: Configured with live SMTP server [${emailSettings.smtpHost}] for user [${emailSettings.smtpUser}]`);
+      console.log(`EmailService: Configured with SMTP server [${emailSettings.smtpHost}] for user [${emailSettings.smtpUser}]`);
       return { transporter: this.transporter, settings: emailSettings };
     }
 
@@ -45,9 +45,9 @@ class EmailService {
           },
         });
         this.cachedConfig = 'ethereal';
-        console.log('📧 EmailService: Initialized Ethereal test preview transporter.');
+        console.log('EmailService: Initialized test transporter.');
       } catch (e) {
-        console.log('📧 EmailService: Running in local console log fallback.');
+        console.log('EmailService: Running in local console log fallback.');
       }
     }
 
@@ -76,16 +76,10 @@ class EmailService {
         messageId = info.messageId;
         previewUrl = nodemailer.getTestMessageUrl(info);
 
-        console.log('\n=================== 📨 OUTGOING EMAIL DISPATCHED ===================');
-        console.log(`TO: ${to}`);
-        console.log(`FROM: ${from}`);
-        console.log(`SUBJECT: ${subject}`);
+        console.log(`Email dispatched to: ${to} (Subject: ${subject})`);
         if (previewUrl) {
-          console.log(`🌐 LIVE PREVIEW: ${previewUrl}`);
+          console.log(`Preview URL: ${previewUrl}`);
         }
-        console.log('---------------------------- TEXT PREVIEW ----------------------------');
-        console.log(text);
-        console.log('====================================================================\n');
 
         const dispatchRecord = {
           to,
@@ -99,19 +93,12 @@ class EmailService {
 
         return { success: true, messageId, previewUrl };
       } catch (err) {
-        console.error(`❌ Failed to dispatch email to ${to}:`, err.message);
+        console.error(`Failed to dispatch email to ${to}:`, err.message);
         throw err;
       }
     }
 
-    // Fallback console logging
-    console.log('\n=================== 📨 OUTGOING EMAIL (FALLBACK) ===================');
-    console.log(`TO: ${to}`);
-    console.log(`FROM: ${from}`);
-    console.log(`SUBJECT: ${subject}`);
-    console.log(text);
-    console.log('====================================================================\n');
-
+    console.log(`Email sent (simulated) to: ${to} (Subject: ${subject})`);
     return { success: true, simulated: true };
   }
 
